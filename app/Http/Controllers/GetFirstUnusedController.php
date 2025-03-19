@@ -65,11 +65,13 @@ class GetFirstUnusedController extends Controller
             ]);
             
             // Devolver la respuesta como JSON 
-            return response()->json([
+            $data = [
                 'success' => true,
                 'data' => json_decode($responseBody),
                 'applicant_id' => $applicant->id
-            ]);
+            ];
+            return $data;
+            
         } catch (\Exception $e) {
             // Manejar el error y registrarlo
             Log::error('Error en getFirstUnusedScratchcard:', [
