@@ -27,4 +27,8 @@ Route::post('/subirExcel', [ApplicantController::class, 'importarExcel'])->name(
 Route::get('/get-scratchcard', [GetFirstUnusedController::class, 'getFirstUnusedScratchcard'])
     ->name('get.scratchcard');
 
+Route::post('/validar-excel', [ApplicantController::class, 'validateExcel'])->name('validar.excel');
+Route::get('/errores-validacion', [ApplicantController::class, 'getValidationErrors'])->name('validacion.errores');
+Route::get('/descargar-reporte-errores', [ApplicantController::class, 'downloadErrorReport'])->name('descargar.errores');
+
 require __DIR__ . '/auth.php';
