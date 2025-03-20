@@ -2,6 +2,7 @@
 
 namespace App\Imports;
 
+use App\Http\Controllers\ApproveRequest;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Request as Psr7Request;
 use Illuminate\Support\Collection;
@@ -14,17 +15,22 @@ use App\Http\Controllers\GeneratesTbsReceiptController;
 use App\Models\ApplicantData;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Maatwebsite\Excel\Concerns\WithChunkReading;
 
-class ApplicantImport implements WithHeadingRow, ToCollection
+class ApplicantImport implements WithHeadingRow, ToCollection, WithChunkReading
 {
     use PlGetDocument;
+
+    public function chunkSize(): int
+    {
+        return 500; // Procesa en lotes de 500
+    }
 
     public function collection(Collection $collection)
     {
         $client = new Client([
             'cert' => storage_path('ra_certs/cer.pem'),
             'ssl_key' => storage_path('ra_certs/key.pem'),
-            'verify' => false,
         ]);
 
         $headers = [
@@ -140,6 +146,13 @@ class ApplicantImport implements WithHeadingRow, ToCollection
                 ]);
                 
                 Log::info('Proceso completado exitosamente para DUI: ' . $value['dui']);
+
+                // PASO 5: OBTENER DOCUMENTO (BASE 64)
+                $this->getDocument($responsePaso2->pk, $paso1_ApplicantID);
+
+                // PASO 6: APROVACIÓN
+                $aprovacion = new ApproveRequest();
+                $aprovacion->plApprove($responsePaso2->pk);
                 
             } catch (\Exception $e) {
                 Log::error('Error en el proceso de importación', [

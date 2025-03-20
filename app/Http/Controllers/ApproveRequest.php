@@ -9,10 +9,10 @@ use GuzzleHttp\Psr7\Request as Psr7Request;
 
 class ApproveRequest extends Controller
 {
-    public function plApprove($request)
+    public function plApprove($pk)
     {
         try {
-            $create_request_id = $request['create_request_id'];
+            $create_request_id = $pk;
             $client = new Client([
                 'cert' => storage_path('ra_certs/cer.pem'),
                 'ssl_key' => storage_path('ra_certs/key.pem'),
