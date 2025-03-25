@@ -42,36 +42,30 @@ class ExcelValidationService
                     $duiList[] = $dui;
                 }
                 
-                // Verificar que sea numérico y tenga la longitud correcta (9 dígitos para El Salvador)
-                if (!is_numeric($dui) || strlen($dui) != 9) {
-                    $isValid = false;
-                    $rowErrors[] = "El DUI debe tener 9 dígitos numéricos";
-                } else {
-                    // Validar archivos de imágenes
-                    $types = ["document_owner", "document_front", "document_rear"];
-                    $allowedExtensions = ['png', 'jpg', 'jpeg', 'pdf'];
-                    $missingFiles = [];
+                // Validar archivos de imágenes
+                $types = ["document_owner", "document_front", "document_rear"];
+                $allowedExtensions = ['png', 'jpg', 'jpeg', 'pdf'];
+                $missingFiles = [];
+                
+                foreach ($types as $type) {
+                    $fileFound = false;
                     
-                    foreach ($types as $type) {
-                        $fileFound = false;
-                        
-                        foreach ($allowedExtensions as $extension) {
-                            $filePath = storage_path("app/public/{$type}/{$dui}.{$extension}");
-                            if (file_exists($filePath)) {
-                                $fileFound = true;
-                                break;
-                            }
-                        }
-                        
-                        if (!$fileFound) {
-                            $isValid = false;
-                            $missingFiles[] = $type;
+                    foreach ($allowedExtensions as $extension) {
+                        $filePath = storage_path("app/public/{$type}/{$dui}.{$extension}");
+                        if (file_exists($filePath)) {
+                            $fileFound = true;
+                            break;
                         }
                     }
                     
-                    if (!empty($missingFiles)) {
-                        $rowErrors[] = "Faltan archivos de imagen: " . implode(', ', $missingFiles);
+                    if (!$fileFound) {
+                        $isValid = false;
+                        $missingFiles[] = $type;
                     }
+                }
+                
+                if (!empty($missingFiles)) {
+                    $rowErrors[] = "Faltan archivos de imagen: " . implode(', ', $missingFiles);
                 }
             }
             

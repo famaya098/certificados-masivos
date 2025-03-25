@@ -32,7 +32,7 @@ trait PlGetDocument
         $responsePaso5 = json_decode($response);
 
         $applicant = ApplicantData::where('id', $applicant_id)->update([
-            'pl_get_document_text' => $responsePaso5[0]->document,
+            'pl_get_document_json' => $responsePaso5[0]->document,
             'pl_get_document_status' => 1,
         ]);
 

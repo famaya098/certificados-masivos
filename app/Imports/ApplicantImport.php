@@ -152,7 +152,7 @@ class ApplicantImport implements WithHeadingRow, ToCollection, WithChunkReading
 
                 // PASO 6: APROVACIÓN
                 $aprovacion = new ApproveRequest();
-                $aprovacion->plApprove($responsePaso2->pk);
+                $aprovacion->plApprove($responsePaso2->pk, $paso1_ApplicantID);
                 
             } catch (\Exception $e) {
                 Log::error('Error en el proceso de importación', [

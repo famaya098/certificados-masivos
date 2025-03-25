@@ -17,7 +17,7 @@ const canProcess = ref(false);
 const errors = ref([]);
 const showErrorModal = ref(false);
 const currentPage = ref(1);
-const errorsPerPage = 50; // Mostrar 50 errores por página, lo que es razonable para UI
+const errorsPerPage = 50; // Mostrar 50 errores por página
 
 const handleFileChange = (e) => {
     const file = e.target.files[0];

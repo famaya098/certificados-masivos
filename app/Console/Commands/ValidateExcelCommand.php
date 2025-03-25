@@ -39,6 +39,7 @@ class ValidateExcelCommand extends Command
             $validCount = 0;
             $invalidCount = 0;
             $errors = [];
+            $duiList = []; // rastrear DUIs ya procesados
             
             $requiredFields = [
                 'nombre1', 'apellido1', 'dui', 'correo', 'telefono', 'departamento', 'distrito'
@@ -61,39 +62,41 @@ class ValidateExcelCommand extends Command
                     }
                 }
                 
-                // Validar formato de DUI si existe
+                // Validar DUI si existe (solo verificamos que no esté vacío y las imágenes correspondientes)
                 if (isset($row['dui']) && !empty($row['dui'])) {
                     $dui = $row['dui'];
                     
-                    // Verificar que sea numérico y tenga la longitud correcta (9 dígitos para El Salvador)
-                    if (!is_numeric($dui) || strlen($dui) != 9) {
+                    // Verificar duplicados
+                    if (in_array($dui, $duiList)) {
                         $isValid = false;
-                        $rowErrors[] = "El DUI debe tener 9 dígitos numéricos";
+                        $rowErrors[] = "DUI duplicado en el archivo";
                     } else {
-                        // Validar archivos de imágenes
-                        $types = ["document_owner", "document_front", "document_rear"];
-                        $allowedExtensions = ['png', 'jpg', 'jpeg', 'pdf'];
-                        $missingFiles = [];
-                        
-                        foreach ($types as $type) {
-                            $fileFound = false;
-                            foreach ($allowedExtensions as $extension) {
-                                $filePath = storage_path("app/public/{$type}/{$dui}.{$extension}");
-                                if (file_exists($filePath)) {
-                                    $fileFound = true;
-                                    break;
-                                }
-                            }
-                            
-                            if (!$fileFound) {
-                                $isValid = false;
-                                $missingFiles[] = $type;
+                        $duiList[] = $dui; // Agregar DUI a la lista de procesados
+                    }
+                    
+                    // Validar archivos de imágenes
+                    $types = ["document_owner", "document_front", "document_rear"];
+                    $allowedExtensions = ['png', 'jpg', 'jpeg', 'pdf'];
+                    $missingFiles = [];
+                    
+                    foreach ($types as $type) {
+                        $fileFound = false;
+                        foreach ($allowedExtensions as $extension) {
+                            $filePath = storage_path("app/public/{$type}/{$dui}.{$extension}");
+                            if (file_exists($filePath)) {
+                                $fileFound = true;
+                                break;
                             }
                         }
                         
-                        if (!empty($missingFiles)) {
-                            $rowErrors[] = "Faltan archivos de imagen: " . implode(', ', $missingFiles);
+                        if (!$fileFound) {
+                            $isValid = false;
+                            $missingFiles[] = $type;
                         }
+                    }
+                    
+                    if (!empty($missingFiles)) {
+                        $rowErrors[] = "Faltan archivos de imagen: " . implode(', ', $missingFiles);
                     }
                 }
                 
