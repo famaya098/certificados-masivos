@@ -22,11 +22,11 @@ trait PlGetDocument
 
         $body = [
             'type' => 'contract',
-            'rao_id' => '449',
+            'rao_id' => env('API_RAO_ID', 449)
         ];
         $body = json_encode($body);
 
-        $request = new Psr7Request('POST', "https://api.sandbox.uanataca.com/api/v1/requests/{$pk}/pl_get_document/", $headers, $body);
+        $request = new Psr7Request('POST', "https://api.uanataca.com/api/v1/requests/{$pk}/pl_get_document/", $headers, $body);
         $res = $client->sendAsync($request)->wait(); // Convertir la respuesta a JSON
         $response = (string) $res->getBody(); //Convertir la respuesta a STRING.
         $responsePaso5 = json_decode($response);

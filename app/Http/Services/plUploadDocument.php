@@ -32,7 +32,7 @@ trait plUploadDocument
 
             $curl = curl_init();
             curl_setopt_array($curl, [
-                CURLOPT_URL => 'https://api.sandbox.uanataca.com/api/v1/requests/' . $request['create_request_id'] . '/pl_upload_document/',
+                CURLOPT_URL => 'https://api.uanataca.com/api/v1/requests/' . $request['create_request_id'] . '/pl_upload_document/',
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_FOLLOWLOCATION => true,
                 CURLOPT_CUSTOMREQUEST => 'POST',

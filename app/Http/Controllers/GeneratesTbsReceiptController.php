@@ -19,15 +19,6 @@ class GeneratesTbsReceiptController extends Controller
             ]);
             
             $createRequestId = $request->input('create_request_id');
-
-            // Obtener el rao_id activo desde la base de datos
-            $raoData = rao_data::where('status', 1)->first();
-            
-            if (!$raoData) {
-                throw new \Exception('No se encontró ningún RAO activo en la base de datos');
-            }
-            
-            $raoId = $raoData->rao_id;
             
             // cliente HTTP con los certificados
             $client = new Client([
@@ -41,13 +32,13 @@ class GeneratesTbsReceiptController extends Controller
             ];
 
             $bodyArray = [
-                'rao' => $raoId,
+                'rao' => env('API_RAO_ID', 449),
                 'type' => 'APPROVE',
             ];
             $body = json_encode($bodyArray);
 
             // URL completa
-            $url = "https://api.sandbox.uanataca.com/api/v1/requests/{$createRequestId}/generates_tbs_receipt/";
+            $url = "https://api.uanataca.com/api/v1/requests/{$createRequestId}/generates_tbs_receipt/";
             
             // Crear la solicitud
             $request = new Psr7Request('POST', $url, $headers, $body);

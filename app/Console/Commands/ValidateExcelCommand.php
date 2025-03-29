@@ -42,7 +42,7 @@ class ValidateExcelCommand extends Command
             $duiList = []; // rastrear DUIs ya procesados
             
             $requiredFields = [
-                'nombre1', 'apellido1', 'dui', 'correo', 'telefono', 'departamento', 'distrito'
+                'nombre1', 'apellido1', 'dui', 'correo', 'telefono', 'direccion', 'distrito'
             ];
             
             // Crear una barra de progreso

@@ -7,7 +7,7 @@ use Illuminate\Support\Collection;
 class ExcelValidationService
 {
     protected $requiredFields = [
-        'nombre1', 'apellido1', 'dui', 'correo', 'telefono', 'departamento', 'distrito'
+        'nombre1', 'apellido1', 'dui', 'correo', 'telefono', 'direccion', 'distrito'
     ];
 
     public function validateRows(Collection $rows)

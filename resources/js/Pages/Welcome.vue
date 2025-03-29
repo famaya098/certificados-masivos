@@ -269,7 +269,7 @@ const prevPage = () => {
                                 <div class="mt-6 p-4 bg-gray-50 dark:bg-gray-700/30 rounded-lg">
                                     <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Formato del archivo Excel</h3>
                                     <p class="text-xs text-gray-600 dark:text-gray-400">
-                                        El archivo debe contener las siguientes columnas: nombre1, apellido1, dui, correo, teléfono, departamento y distrito.
+                                        El archivo debe contener las siguientes columnas: nombre1, apellido1, dui, correo, teléfono, direccion y distrito.
                                     </p>
                                     <p class="text-xs text-gray-600 dark:text-gray-400 mt-2">
                                         Además, necesita tener las imágenes de los documentos en las siguientes carpetas:

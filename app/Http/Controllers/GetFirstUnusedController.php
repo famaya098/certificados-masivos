@@ -40,7 +40,7 @@ class GetFirstUnusedController extends Controller
             $body = json_encode($bodyArray);
 
             // URL completa
-            $url = 'https://api.sandbox.uanataca.com/api/v1/scratchcards/get_first_unused/';
+            $url = 'https://api.uanataca.com/api/v1/scratchcards/get_first_unused/';
             
             // Crear la solicitud
             $request = new Psr7Request('GET', $url, $headers, $body);

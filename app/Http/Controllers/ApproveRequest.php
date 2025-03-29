@@ -29,7 +29,7 @@ class ApproveRequest extends Controller
                 'language' => env('API_LANGUAGE', 'ES'),
             ];
             $body = json_encode($body);
-            $request = new Psr7Request('POST', "https://api.sandbox.uanataca.com/api/v1/requests/{$create_request_id}/pl_approve/", $headers, $body);
+            $request = new Psr7Request('POST', "https://api.uanataca.com/api/v1/requests/{$create_request_id}/pl_approve/", $headers, $body);
             $res = $client->sendAsync($request)->wait();
 
             $applicant_model = ApplicantData::findOrFail($applicant_id);

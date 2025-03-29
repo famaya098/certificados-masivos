@@ -53,31 +53,34 @@ class ApplicantImport implements WithHeadingRow, ToCollection, WithChunkReading
                 $paso1_ApplicantID = $respuestaPaso1['applicant_id'];
 
                 // PASO 2: Crear solicitud
+                $duiCorregido = str_replace('-', '', $value['dui']);
+                $telefonoCorregido = str_replace('-', '', $value['telefono']);
+
                 $data = [
                     'secure_element' => '2',
                     'profile' => 'PFnubeQBCRCiudadano',
                     'validity_time' => '365',
                     'scratchcard' => $paso1_SN,
                     'given_name' => $value['nombre1'],
-                    'second_name' => $value['nombre2'] ?? '',
+                    'second_name' => '',
                     'country_name' => 'SV',
-                    'serial_number' => $value['dui'],
+                    'serial_number' => $duiCorregido,
                     'id_document_country' => 'SV',
                     'id_document_type' => 'IDC',
                     'surname_1' => $value['apellido1'],
-                    'surname_2' => $value['apellido2'] ?? '',
+                    'surname_2' => '',
                     'registration_authority' => $paso1_RA,
                     'email' => $value['correo'],
-                    'mobile_phone_number' => $value['telefono'],
-                    'residence_address' => $value['departamento'],
+                    'mobile_phone_number' => '+503' . $telefonoCorregido,
+                    'residence_address' => $value['direccion'],
                     'residence_city' => $value['distrito'],
-                    'residence_postal_code' => '05010',
+                    'residence_postal_code' => $value['postal'],
                     'paperless_mode' => 1,
                 ];
                 
                 $body = json_encode($data);
                 
-                $request = new Psr7Request('POST', 'https://api.sandbox.uanataca.com/api/v1/requests/', $headers, $body);
+                $request = new Psr7Request('POST', 'https://api.uanataca.com/api/v1/requests/', $headers, $body);
                 $res = $client->sendAsync($request)->wait();
                 $response = (string) $res->getBody();
                 $responsePaso2 = json_decode($response);
